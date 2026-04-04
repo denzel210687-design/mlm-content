@@ -820,6 +820,13 @@ ${extra ? `- Дополнительно хочет рассказать: ${extra
       });
 
       const data = await response.json();
+
+      // Handle API errors
+      if (data.error) throw new Error(data.error.message || 'Ошибка API. Проверь ключ в Cloudflare.');
+      if (!data.content || !Array.isArray(data.content)) {
+        throw new Error('Неверный ответ: ' + JSON.stringify(data).slice(0, 100));
+      }
+
       const text = data.content.map(i => i.text || '').join('');
 
       let parsed;
