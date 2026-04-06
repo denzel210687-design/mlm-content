@@ -831,10 +831,13 @@ ${extra ? `- Дополнительно хочет рассказать: ${extra
 
       let parsed;
       try {
+        // Try to extract JSON from anywhere in the response
         const clean = text.replace(/```json|```/g, '').trim();
-        parsed = JSON.parse(clean);
+        const jsonMatch = clean.match(/\{[\s\S]*\}/);
+        if (!jsonMatch) throw new Error('no json');
+        parsed = JSON.parse(jsonMatch[0]);
       } catch(e) {
-        throw new Error('Не удалось разобрать ответ. Попробуй ещё раз.');
+        throw new Error('Не удалось разобрать ответ. Попробуй ещё раз. Детали: ' + e.message);
       }
 
       clearInterval(stepInterval);
