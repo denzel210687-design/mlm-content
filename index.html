@@ -636,6 +636,24 @@
       </div>
 
       <div class="form-group full">
+        <label>Твой пол</label>
+        <div class="chips" id="genderChips">
+          <div class="chip active" data-val="мужской">👨 Мужской</div>
+          <div class="chip" data-val="женский">👩 Женский</div>
+        </div>
+      </div>
+
+      <div class="form-group full">
+        <label>Твой возраст</label>
+        <div class="chips" id="ageChips">
+          <div class="chip active" data-val="18-25 лет">18–25</div>
+          <div class="chip" data-val="26-35 лет">26–35</div>
+          <div class="chip" data-val="36-45 лет">36–45</div>
+          <div class="chip" data-val="46+ лет">46+</div>
+        </div>
+      </div>
+
+      <div class="form-group full">
         <label>Цель контента</label>
         <div class="chips" id="goalChips">
           <div class="chip active" data-val="привлечение партнёров">🤝 Партнёры</div>
@@ -725,6 +743,20 @@
 
 <script>
   // Chips logic
+  document.querySelectorAll('#genderChips .chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('#genderChips .chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+    });
+  });
+
+  document.querySelectorAll('#ageChips .chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      document.querySelectorAll('#ageChips .chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+    });
+  });
+
   document.querySelectorAll('#goalChips .chip').forEach(chip => {
     chip.addEventListener('click', () => {
       document.querySelectorAll('#goalChips .chip').forEach(c => c.classList.remove('active'));
@@ -813,6 +845,8 @@
     const audience = document.getElementById('audience').value.trim();
     const goal = getActiveChip('goalChips');
     const style = getActiveChip('styleChips');
+    const gender = getActiveChip('genderChips');
+    const age = getActiveChip('ageChips');
     const extra = document.getElementById('extra').value.trim();
 
     if (!company || !audience) {
@@ -837,6 +871,8 @@
 - Целевая аудитория: ${audience}
 - Цель контента: ${goal}
 - Стиль подачи: ${style}
+- Пол автора: ${gender}
+- Возраст автора: ${age}
 ${extra ? `- Дополнительно хочет рассказать: ${extra}` : ''}
 
 ВАЖНО — формат ответа СТРОГО в JSON, без markdown, без пояснений, только JSON:
@@ -864,7 +900,8 @@ ${extra ? `- Дополнительно хочет рассказать: ${extra
 - Hook — это реальный заголовок который можно использовать сразу
 - Учитывай специфику ${company} и аудиторию "${audience}"
 - Первая неделя — знакомство и доверие, вторая — экспертность, третья — социальные доказательства, четвёртая — призыв и действие
-- Стиль: ${style}`;
+- Стиль: ${style}
+- Учитывай пол (${gender}) и возраст (${age}) автора: подбирай примеры, tone of voice и ситуации близкие именно этой аудитории`;
 
     try {
       const response = await fetch('https://small-bread-772e.denzel210687.workers.dev', {
